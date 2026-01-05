@@ -1,0 +1,21 @@
+# visual Studio Code
+.vscode/
+.vs/
+
+# Compiled files
+*.exe
+*.o
+*.obj
+*.out
+a.out
+
+# Build folders
+Debug/
+Release/
+x64/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
