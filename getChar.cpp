@@ -10,7 +10,6 @@ int main(){
 
     printf("nhap chuoi: ");
     fgets(str, 50, stdin);
-    
     printf("ket qua: %s\n", str);
 
 }
