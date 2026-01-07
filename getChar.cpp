@@ -9,8 +9,7 @@ int main(){
     while(getchar() != '\n'); //caution to clear buffer
 
     printf("nhap chuoi: ");
-    fgets(str, 50, stdin); 
-    
+    fgets(str, 50, stdin);
     printf("ket qua: %s\n", str);
 
 }
