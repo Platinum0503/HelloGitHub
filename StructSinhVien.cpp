@@ -2,6 +2,13 @@
 #include <string.h>
 #include <stdlib.h>
 
+//"r"Read (Đọc)Mở file để ĐỌC. File phải tồn tại.
+//"w"Write (Ghi)Mở file để GHI. XÓA NỘI DUNG CŨ nếu file đã tồn tại. Tạo mới nếu chưa có.
+//"a"Append (Thêm)Mở file để GHI THÊM. Không xóa nội dung cũ. Ghi ở cuối file.
+//"r+"Read + WriteĐọc và ghi. File phải tồn tại.
+//"w+"Write + ReadGhi và đọc. XÓA NỘI DUNG CŨ.
+//"a+"Append + ReadThêm và đọc. Không xóa nội dung cũ.
+
 struct sinhVien {
     int id;
     char ten[50];
@@ -12,7 +19,7 @@ typedef struct sinhVien sinhVien;
 
 //luu va doc file
 void luuFile(sinhVien sv[], int n){
-    FILE *f = fopen("sinhVien1.txt", "w");
+    FILE *f = fopen("sinhVien1.txt", "w"); // "w" = Write mode (Chế độ GHI)
     if(f == NULL){
         printf("loi mo file!\n");
         return;
@@ -28,7 +35,7 @@ void luuFile(sinhVien sv[], int n){
 }
 
 int docFile(sinhVien **sv){
-    FILE *f = fopen("sinhVien1.txt", "r");
+    FILE *f = fopen("sinhVien1.txt", "r");  //"r"Read (Đọc)Mở file để ĐỌC. File phải tồn tại.
     if(f == NULL){
         printf(">>> Khong tim thay file, bat dau danh sach moi.\n");
         return 0;
@@ -37,7 +44,7 @@ int docFile(sinhVien **sv){
     int n;
     fscanf(f, "%d\n", &n);
 
-    *sv = (sinhVien*)malloc(n * sizeof(sinhVien));
+    *sv = (sinhVien*)malloc(n * sizeof(sinhVien)); //malloc cap phat bo nho (tuỳ thuộc input n của người dùng)
     if(*sv == NULL){
         printf("Loi cap phat!\n");
         fclose(f);
@@ -98,7 +105,7 @@ void nhapSinhVien(sinhVien *sv, int id){
 }
 
 void themSinhVien(sinhVien **sv, int *n){
-    *sv = (sinhVien*)realloc(*sv, (*n + 1) * sizeof(sinhVien));
+    *sv = (sinhVien*)realloc(*sv, (*n + 1) * sizeof(sinhVien)); //realloc cap phat bo nho tang them 1 sinh vien, muốn thay đổi bộ nhớ của con trỏ sv
 
     if(*sv == NULL){
         printf("Loi cap phat bo nho!\n");
