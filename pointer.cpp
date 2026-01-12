@@ -47,8 +47,9 @@ void menu(){
     printf("Nhap lua chon cua ban: ");
 }
 int main(){
-    float a,b;
+    float a = 0,b = 0; //khởi tạo giá trị ban đầu
     int luaChon;
+    int daNhap = 0; //cờ kiểm tra đã nhập chưa
     do{
         menu();
         scanf("%d", &luaChon);
