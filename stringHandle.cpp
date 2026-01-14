@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h> //caution
 
-void inputString(char *str){ //caution
+void inputString(char *str){ //cautionq
     printf("Nhap chuoi cua ban: ");
     fgets(str, 100, stdin); //caution
     //strcspn delete \n
@@ -34,7 +34,7 @@ void demSolan(char str[]){  //caution
     timKiem[strcspn(timKiem, "\n")] = '\0'; //caution
 
     char *pos = str; //caution
-    int len = strlen(timKiem); //caution
+    int len = strlen(timKiem); //strlen -> lưu độ dài của chuỗi
 
     //tìm từng lần xuất hiện
     while((pos = strstr(pos, timKiem)) != NULL){
