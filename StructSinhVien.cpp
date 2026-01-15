@@ -25,7 +25,7 @@ void luuFile(sinhVien sv[], int n){
         return;
     }
 
-    fprintf(f, "%d\n", n);
+    fprintf(f, "%d\n", n); //caution
 
     for(int i = 0; i < n;i++){
         fprintf(f, "%d|%s|%d|%.2f\n", sv[i].id, sv[i].ten, sv[i].tuoi, sv[i].diem);

@@ -2,10 +2,11 @@
 #include <math.h>
 #include <time.h> //chứa time()
 #include <stdlib.h> //chứa rand() và srand()
+
 float my_abs(float x){
     return (x < 0) ? -x : x;
 }
-
+    
 void menu(){
     printf("\n=== MENU ===\n");
     printf("1.Tim so lon nhat\n");
@@ -49,6 +50,8 @@ void checkTuyetDoi(){ //bỏ tham số
 
 void idTuDong(){ //bỏ tham số
     static int lastID = 0; //lưu id cuối cùng
+
+    //static ở đây là sẽ khởi tạo lastID liên tục, giá trị vẫn giữ nguyên không bị reset khi kết thúc hàm
 
     printf("\n=== TAO ID TU DONG ===\n");
 
