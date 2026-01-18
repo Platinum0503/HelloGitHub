@@ -1,27 +1,33 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
+
+//"r"Read (Đọc)Mở file để ĐỌC. File phải tồn tại.
+//"w"Write (Ghi)Mở file để GHI. XÓA NỘI DUNG CŨ nếu file đã tồn tại. Tạo mới nếu chưa có.
+//"a"Append (Thêm)Mở file để GHI THÊM. Không xóa nội dung cũ. Ghi ở cuối file.
+//"r+"Read + WriteĐọc và ghi. File phải tồn tại.
+//"w+"Write + ReadGhi và đọc. XÓA NỘI DUNG CŨ.
+//"a+"Append + ReadThêm và đọc. Không xóa nội dung cũ.
 
 struct sinhVien {
-    int id;  // Thêm ID
+    int id;
     char ten[50];
     int tuoi;
     float diem;
 };
 typedef struct sinhVien sinhVien;
-// ========== LƯU VÀ ĐỌC FILE ==========
 
+//luu va doc file
 void luuFile(sinhVien sv[], int n){
-    FILE *f = fopen("sinhvien.txt", "w");
+    FILE *f = fopen("sinhVien1.txt", "w"); // "w" = Write mode (Chế độ GHI)
     if(f == NULL){
-        printf("Loi mo file!\n");
+        printf("loi mo file!\n");
         return;
     }
-    
-    fprintf(f, "%d\n", n);
 
-    for(int i = 0; i < n; i++){
-        // Sửa: Thêm các tham số vào fprintf
+    fprintf(f, "%d\n", n); //caution
+
+    for(int i = 0; i < n;i++){
         fprintf(f, "%d|%s|%d|%.2f\n", sv[i].id, sv[i].ten, sv[i].tuoi, sv[i].diem);
     }
     fclose(f);
@@ -29,7 +35,7 @@ void luuFile(sinhVien sv[], int n){
 }
 
 int docFile(sinhVien **sv){
-    FILE *f = fopen("sinhvien.txt", "r");
+    FILE *f = fopen("sinhVien1.txt", "r");  //"r"Read (Đọc)Mở file để ĐỌC. File phải tồn tại.
     if(f == NULL){
         printf(">>> Khong tim thay file, bat dau danh sach moi.\n");
         return 0;
@@ -38,28 +44,24 @@ int docFile(sinhVien **sv){
     int n;
     fscanf(f, "%d\n", &n);
 
-    *sv = (sinhVien*)malloc(n * sizeof(sinhVien));
+    *sv = (sinhVien*)malloc(n * sizeof(sinhVien)); //malloc cap phat bo nho (tuỳ thuộc input n của người dùng)
     if(*sv == NULL){
         printf("Loi cap phat!\n");
         fclose(f);
         return 0;
     }
 
-    for(int i = 0; i < n; i++){
-        // Sửa: Thêm các tham số vào fscanf
-        fscanf(f, "%d|%[^|]|%d|%f\n", 
-               &(*sv)[i].id, (*sv)[i].ten, &(*sv)[i].tuoi, &(*sv)[i].diem);
-//**`%[^|]` nghĩa là:** Đọc TẤT CẢ ký tự **CHO ĐẾN KHI** gặp `|`
+    for(int i = 0; i < n;i++){
+        fscanf(f, "%d|%[^|]|%d|%f\n",
+        &(*sv)[i].id, (*sv)[i].ten, &(*sv)[i].tuoi, &(*sv)[i].diem);
     }
     fclose(f);
     printf(">>> Da doc %d sinh vien tu file.\n", n);
     return n;
 }
 
-// ========== TÌM KIẾM ==========
-
 int timKiemTheoID(sinhVien sv[], int n, int id){
-    for(int i = 0; i < n; i++){
+    for(int i = 0; i < n;i++){
         if(sv[i].id == id){
             return i;
         }
@@ -71,27 +73,24 @@ void timKiemTheoTen(sinhVien sv[], int n){
     char ten[50];
     printf("Nhap ten can tim: ");
     fgets(ten, sizeof(ten), stdin);
-    ten[strcspn(ten, "\n")] = '\0';
-    
+    ten[strcspn(ten, "\n")] = '\0'; //caution //loai bo xuong dong
+
     int found = 0;
     printf("\n=== KET QUA TIM KIEM ===\n");
-    for(int i = 0; i < n; i++){
+    for(int i = 0; i < n;i++){
         if(strstr(sv[i].ten, ten) != NULL){
             printf("ID: %d | Ten: %s | Tuoi: %d | Diem: %.2f\n",
-                   sv[i].id, sv[i].ten, sv[i].tuoi, sv[i].diem);
+            sv[i].id, sv[i].ten, sv[i].tuoi, sv[i].diem);
             found = 1;
         }
     }
     if(!found){
-        printf(">>> Khong tim thay!\n");
+        printf(">>> Khong tim thay sinh vien voi ten \"%s\"\n", ten);
     }
 }
 
-// ========== NHẬP SINH VIÊN ==========
-
 void nhapSinhVien(sinhVien *sv, int id){
-    sv->id = id;  // Gán ID
-    
+    sv->id = id; //gán ID
     printf("Nhap ten: ");
     fgets(sv->ten, sizeof(sv->ten), stdin);
     sv->ten[strcspn(sv->ten, "\n")] = '\0';
@@ -105,28 +104,23 @@ void nhapSinhVien(sinhVien *sv, int id){
     while(getchar() != '\n');
 }
 
-// ========== THÊM SINH VIÊN ==========
-
 void themSinhVien(sinhVien **sv, int *n){
-    *sv = (sinhVien*)realloc(*sv, (*n + 1) * sizeof(sinhVien));
-    
+    *sv = (sinhVien*)realloc(*sv, (*n + 1) * sizeof(sinhVien)); //realloc cap phat bo nho tang them 1 sinh vien, muốn thay đổi bộ nhớ của con trỏ sv
+
     if(*sv == NULL){
-        printf("Loi cap phat!\n");
+        printf("Loi cap phat bo nho!\n");
         return;
     }
-    
-    printf("\n=== THEM SINH VIEN MOI ===\n");
-    
-    // ID tự động tăng
-    int newId = (*n == 0) ? 1 : (*sv)[*n - 1].id + 1;
-    
+
+    printf("=== NHAP THONG TIN SINH VIEN MOI ===\n");
+    //ID tu dong tang
+    int newId = (*n == 0) ? 1 : (*sv)[*n - 1].id + 1; //caution
+
     nhapSinhVien(&(*sv)[*n], newId);
     (*n)++;
-    
-    printf("\n>>> Da them thanh cong! (ID: %d)\n", newId);
-}
 
-// ========== SỬA THÔNG TIN ==========
+    printf(">>> Da them thanh cong! (ID: %d)\n", newId);
+}
 
 void suaThongTin(sinhVien sv[], int n){
     int id;
@@ -137,71 +131,65 @@ void suaThongTin(sinhVien sv[], int n){
     int viTri = timKiemTheoID(sv, n, id);
 
     if(viTri == -1){
-        printf(">>> Khong tim thay ID %d\n", id);
+        printf(">>> khong tim thay ID %d\n", id);
         return;
     }
-    
+
     printf("\n=== THONG TIN HIEN TAI ===\n");
     printf("ID: %d | Ten: %s | Tuoi: %d | Diem: %.2f\n",
            sv[viTri].id, sv[viTri].ten, sv[viTri].tuoi, sv[viTri].diem);
     
-    printf("\n=== NHAP THONG TIN MOI ===\n");
+    printf("\n=== NHAP THONG TIN MOIW ===\n");
     printf("Nhap ten moi: ");
     fgets(sv[viTri].ten, sizeof(sv[viTri].ten), stdin);
     sv[viTri].ten[strcspn(sv[viTri].ten, "\n")] = '\0';
     
     printf("Nhap tuoi moi: ");
     scanf("%d", &sv[viTri].tuoi);
-    
+
     printf("Nhap diem moi: ");
     scanf("%f", &sv[viTri].diem);
-    
+
     while(getchar() != '\n');
-    
     printf("\n>>> Da sua thanh cong!\n");
 }
-
-// ========== XÓA SINH VIÊN ==========
 
 void xoaSinhVien(sinhVien **sv, int *n){
     int id;
     printf("Nhap ID can xoa: ");
     scanf("%d", &id);
     while(getchar() != '\n');
-    
+
     int viTri = timKiemTheoID(*sv, *n, id);
-    
+
     if(viTri == -1){
-        printf(">>> Khong tim thay ID %d\n", id);
+        printf(">>> khong tim thay ID %d\n", id);
         return;
     }
-    
+
     printf("\n=== SINH VIEN SE BI XOA ===\n");
     printf("ID: %d | Ten: %s | Tuoi: %d | Diem: %.2f\n",
-           (*sv)[viTri].id, (*sv)[viTri].ten, (*sv)[viTri].tuoi, (*sv)[viTri].diem);
-    
-    printf("\nXac nhan xoa? (y/n): ");
+    (*sv)[viTri].id, (*sv)[viTri].ten, (*sv)[viTri].tuoi, (*sv)[viTri].diem);
+
+    printf("Xac nhan xoa (y/n): ");
     char confirm = getchar();
     while(getchar() != '\n');
-    
+
     if(confirm != 'y' && confirm != 'Y'){
         printf(">>> Huy xoa.\n");
         return;
     }
 
-    // Dịch các phần tử về trước
-    for(int i = viTri; i < *n - 1; i++){
-        (*sv)[i] = (*sv)[i + 1];
+    //dịch các phần tử sau lên trước
+    for(int i = viTri; i < *n-1;i++){
+        (*sv)[i] = (*sv)[i+1];
     }
     (*n)--;
 
-    // Thu nhỏ bộ nhớ
+    //thu nhỏ bộ nhớ
     *sv = (sinhVien*)realloc(*sv, (*n) * sizeof(sinhVien));
-    
-    printf("\n>>> Da xoa thanh cong!\n");
+    printf(">>> Da xoa thanh cong!\n");
 }
-
-// ========== IN VÀ SẮP XẾP ==========
 
 void printStudent(sinhVien sv){
     printf("\n=== Thong tin sinh vien ===\n");
@@ -219,24 +207,24 @@ void diemCaoNhat(sinhVien sv[], int n){
 
     int viTri = 0;
     float max = sv[0].diem;
-    for(int i = 1; i < n; i++){
+    for(int i = 1;i < n;i++){
         if(sv[i].diem > max){
             max = sv[i].diem;
             viTri = i;
         }
     }
-    printf("\n=== Sinh vien co diem cao nhat ===\n");
+    printf("\n=== SINH VIEN CO DIEM CAO NHAT ===\n");
     printf("ID: %d | Ten: %s | Tuoi: %d | Diem: %.2f\n",
-           sv[viTri].id, sv[viTri].ten, sv[viTri].tuoi, sv[viTri].diem);
+    sv[viTri].id, sv[viTri].ten, sv[viTri].tuoi, sv[viTri].diem);   
 }
 
 void sapXepTheoDiem(sinhVien sv[], int n){
-    for(int i = 0; i < n - 1; i++){
-        for(int j = 0; j < n - i - 1; j++){
-            if(sv[j].diem < sv[j+1].diem){  // Giảm dần
-                sinhVien temp = sv[j];
-                sv[j] = sv[j+1];
-                sv[j+1] = temp;
+    for(int i = 0; i < n-1;i++){
+        for(int j = i+1;j < n;j++){
+            if(sv[i].diem < sv[j].diem){
+                sinhVien temp = sv[i];
+                sv[i] = sv[j];
+                sv[j] = temp;
             }
         }
     }
@@ -245,20 +233,16 @@ void sapXepTheoDiem(sinhVien sv[], int n){
 
 void inDanhSach(sinhVien sv[], int n){
     if(n == 0){
-        printf("\n>>> Danh sach rong!\n");
+        printf("\n===Danh sach rong!===\n");
         return;
     }
-    
-    printf("\n=== DANH SACH SINH VIEN ===\n");
-    printf("%-5s %-20s %-6s %-6s\n", "ID", "Ten", "Tuoi", "Diem");
-    printf("---------------------------------------------\n");
-    for(int i = 0; i < n; i++){
-        printf("%-5d %-20s %-6d %.2f\n", 
-               sv[i].id, sv[i].ten, sv[i].tuoi, sv[i].diem);
+
+    printf("\n===danh sach sinh vien===\n");
+    for(int i = 0; i < n;i++){
+        printf("ID: %d | Ten: %s | Tuoi: %d | Diem: %.2f\n",
+        sv[i].id, sv[i].ten, sv[i].tuoi, sv[i].diem);
     }
 }
-
-// ========== MENU ==========
 
 void menu(){
     printf("\n");
@@ -274,11 +258,9 @@ void menu(){
     printf("Chon chuc nang: ");
 }
 
-// ========== MAIN ==========
-
 int main(){
-    sinhVien *danhSach = NULL;
-    int n = 0;
+    sinhVien *danhSach = NULL; //caution
+    int n = 0;  //caution
     int luaChon;
 
     // Đọc file khi khởi động
@@ -288,51 +270,40 @@ int main(){
         menu();
         scanf("%d", &luaChon);
         while(getchar() != '\n');
-        
-        switch(luaChon) {
+
+        switch(luaChon){
             case 1:
                 themSinhVien(&danhSach, &n);
                 break;
-                
-            case 2:
+            case 2: 
                 inDanhSach(danhSach, n);
                 break;
-                
-            case 3:
+            case 3: 
                 timKiemTheoTen(danhSach, n);
                 break;
-                
             case 4:
                 suaThongTin(danhSach, n);
                 break;
-                
             case 5:
                 xoaSinhVien(&danhSach, &n);
                 break;
-                
-            case 6:
+            case 6: 
                 sapXepTheoDiem(danhSach, n);
                 inDanhSach(danhSach, n);
                 break;
-                
-            case 7:
+            case 7: 
                 luuFile(danhSach, n);
                 break;
-                
-            case 0:
-                printf("\n>>> Dang luu du lieu...\n");
+            case 0: 
                 luuFile(danhSach, n);
-                printf(">>> Tam biet!\n");
+                printf(">>> Thoat chuong trinh. Tam Biet!\n");
                 break;
-                
-            default:
-                printf(">>> Lua chon khong hop le!\n");
-        }
-        
-    } while(luaChon != 0);
-    
+            default: 
+                printf(">>> Lua chon khong hop le. Vui long chon lai!\n");
+        }   
+    }while(luaChon != 0);
+
     // Giải phóng bộ nhớ
     free(danhSach);
 
-    return 0;
 }
