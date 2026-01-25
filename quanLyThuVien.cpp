@@ -34,7 +34,7 @@
         FILE *f = fopen("sach.txt", "r");
         if(f == NULL){
             printf("Loi cap phat bo nho");
-            return 0;
+            return 0;   
         }
         int n;
         fscanf(f, "%d\n", &n);
